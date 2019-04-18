@@ -1,5 +1,6 @@
 package com.example.administrator.photogallery;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -18,6 +21,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class PhotoGalleryFragment extends Fragment {
 
@@ -44,6 +48,20 @@ public class PhotoGalleryFragment extends Fragment {
         mPhotoRecyclerView = (RecyclerView) v.findViewById(R.id.photo_recycler_view);
         mPhotoRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
+        mPhotoRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d(TAG, "onScrollStateChanged: newState=="+newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d(TAG, "onScrolled: dx=="+dx);
+            }
+        });
+
         setupAdapter();
         return v;
     }
@@ -54,14 +72,16 @@ public class PhotoGalleryFragment extends Fragment {
         }
     }
     private  class PhotoHolder extends RecyclerView.ViewHolder{
-        private TextView mTitleTextView;
+//        private TextView mTitleTextView;
+        private ImageView mImageButton;
         public PhotoHolder(@NonNull View itemView) {
             super(itemView);
-            mTitleTextView = (TextView) itemView;
+//            mTitleTextView = (TextView) itemView;
+            mImageButton = (ImageView) itemView.findViewById(R.id.item_image_view);
         }
 
-        public void bindGalleryItem(GalleryItem item) {
-            mTitleTextView.setText(item.toString());
+        public void bindDrawable(Drawable item) {
+            mImageButton.setImageDrawable(item);
         }
     }
 
@@ -75,7 +95,8 @@ public class PhotoGalleryFragment extends Fragment {
         @NonNull
         @Override
         public PhotoHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            TextView view = new TextView(getActivity());
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View view = inflater.inflate(R.layout.list_item_gallery,viewGroup,false);
             return new PhotoHolder(view);
 
         }
@@ -83,7 +104,8 @@ public class PhotoGalleryFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull PhotoHolder photoHolder, int i) {
             GalleryItem galleryItem = mGalleryItems.get(i);
-            photoHolder.bindGalleryItem(galleryItem);
+            Drawable placeholder = getResources().getDrawable(R.drawable.bill_up_close);
+            photoHolder.bindDrawable(placeholder);
         }
 
         @Override
