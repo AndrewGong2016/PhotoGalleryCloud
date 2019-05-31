@@ -13,8 +13,10 @@ import java.util.concurrent.ConcurrentMap;
 
 
 /**
+ *继承于HandlerThread线程类，运行于独立的线程中（非UI线程，这是于Handler类的主要区别：Handler寄生于创建它的线程，可以是UI线程）
  *
  * @param <T> 将在某个方法中使用泛型T
+ *
  */
 public class ThumbnailDownload<T> extends HandlerThread {
 
@@ -30,6 +32,8 @@ public class ThumbnailDownload<T> extends HandlerThread {
     public interface ThumbnailDownloadListener<T> {
         void onThumbnailDownloaded(T target, Bitmap thumbnail);
     }
+
+
     public void setThumbnailDownloadListener(ThumbnailDownloadListener<T> listener) {
         mThumbnailDownloadListener = listener;
     }
@@ -90,6 +94,10 @@ public class ThumbnailDownload<T> extends HandlerThread {
         mRequestMap.clear();
     }
 
+    /**
+     * 私有方法处理下载请求
+     * @param target
+     */
     private void handleRequest(final T target) {
         try {
             final String url = mRequestMap.get(target);

@@ -43,6 +43,7 @@ public class FlickrFetchr {
             connection.disconnect();
         }
     }
+
     public String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
