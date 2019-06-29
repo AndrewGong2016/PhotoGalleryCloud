@@ -11,6 +11,10 @@ public class PhotoGalleryActivity extends SingleFragmentActivity {
         return PhotoGalleryFragment.newInstance();
     }
 
+    /**
+     *
+     *implement superclass method
+     */
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_fragment;
